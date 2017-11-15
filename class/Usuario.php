@@ -1,45 +1,69 @@
-<?php
+<?php 
 
-//classe que conecta ao banco, prepara e executa query
-class Sql extends PDO {
-	private $conn;
-
-	//A cada instancia dessa classe, fazer a conexao com o banco de dados:
-	public function __construct(){
-		$this->conn = new PDO ("mysql:host=localhost;dbname=dbphp7", "root", "");
-	}
+class Usuario {
 	
-	//metodo que que seta os parametros
-	private function setParams($statment, $parametres = array()){
-		//associa os parametros
-		foreach ($parametres as $key => $value) {
-			$this->setParam($key, $value);
+	private $idusuario;
+	private $desclogin;
+	private $descsenha;
+	private $dtcadastro;
+
+	public function getIdusuario(){
+		return $this->idusuario;
+	}
+
+	public function setIdusuario($valor){
+		$this->idusuario = $valor;
+	}
+	public function getDesclogin(){
+		return $this->desclogin;
+	}
+
+	public function setDesclogin($valor){
+		$this->desclogin = $valor;
+	}
+	public function getDescsenha(){
+		return $this->descsenha;
+	}
+
+	public function setDescsenha($valor){
+		$this->descsenha = $valor;
+	}
+	public function getDtcadastro(){
+		return $this->dtcadastro;
+	}
+
+	public function setDtcadastro($valor){
+		$this->dtcadastro = $valor;
+	}
+	//metodo que faz um select dos dados do usuario no banco e seta os atribudos
+	public function loadById($Id){
+
+		$sql = new Sql();
+
+		$results = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
+				":ID"=>$Id	
+		));
+
+		if(count($results) > 0) {
+
+			$row = $results[0];
+
+			$this->setIdusuario($row['idusuario']);
+			$this->setDesclogin($row['desclogin']);
+			$this->setDescsenha($row['descsenha']);
+			$this->setDtcadastro(new Datetime($row['dtcadastro']));
 		}
-	} 
-
-	private function setParam($statment, $key, $value) {
-		$statment->bindParam($key, $value);
-	}
-	
-	public function query($rawQuery, $params = array ()) {
-		//rawQuery: comando sql
-		//$params = array (); dados passados em um array
-		
-		//prepara query
-		$stmt = $this->conn->prepare($rawQuery);
-		//executa metodo que seta os parametros
-		$this->setParams($stmt, $params);
-		
-		$stmt->execute();
-		
-		return $stmt;
 	}
 
-	public function select ($rawQuery, $params = array()):array{
-		$stmt = $this->query($rawQuery, $params);
-
-		return $stmt->fetchAll(PDO::FETCH_ASSOC); //FETCH_ASSOC recupera os dados sem os index deles
+	public function __toString(){
+		return json_encode(array(
+			"idusuario"=>$this->getIdusuario(),
+			"desclogin"=>$this->getDesclogin(),
+			"descsenha"=>$this->getDescsenha(),
+			"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
+		));
 	}
+
 }
 
-?>
+ ?>
