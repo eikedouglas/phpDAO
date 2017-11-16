@@ -30,10 +30,17 @@ require_once("config.php");
 //$aluno->insert();
 ///echo $aluno;
 
-$usuario = new Usuario();
-$usuario->loadById(2);
+//atualiza dados de um determinado registro do banco que é carregado pela função loadById
+//$usuario = new Usuario();
+//$usuario->loadById(2);
+//$usuario->update("professor","b123");
+//echo $usuario;
 
-$usuario->update("professor","b123");
+//deleta registro do banco
+$usuario = new Usuario();
+$usuario->loadById(6);
+
+$usuario->delete();
 
 echo $usuario;
 
