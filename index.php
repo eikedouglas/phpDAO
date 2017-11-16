@@ -7,7 +7,7 @@ require_once("config.php");
 //$usuarios = $sql->select("SELECT * FROM tb_usuarios");
 //echo json_encode($usuarios);
 
-// carrega 1 usuario
+//carrega 1 usuario
 //$usr = new Usuario();
 //$usr->loadById(4);
 //echo $usr;
@@ -21,8 +21,19 @@ require_once("config.php");
 //echo json_encode($busca);
 
 //carrega 1 usuario pelo login e senha
+//$usuario = new Usuario();
+//$usuario->login("root", "@#@$%");
+//echo $usuario;
+
+//inserindo novos registros no banco
+//$aluno = new Usuario("novo","123");
+//$aluno->insert();
+///echo $aluno;
+
 $usuario = new Usuario();
-$usuario->login("bola", "@#@$%");
+$usuario->loadById(2);
+
+$usuario->update("professor","b123");
 
 echo $usuario;
 
